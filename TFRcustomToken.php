@@ -29,13 +29,21 @@ class TFRcustomToken extends PluginBase {
 		{
 			$event = $this->getEvent();
 			$iSurveyID=$event->get('surveyId');
-			if (!$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)) {
-				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)."</pre>";
+			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 0) {
+				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, 0)."</pre>";
 				return;
 			}
 			$iTokenLength = $event->get('iTokenLength');
-			$event->set('generatedToken', randomChars($iTokenLength, '123456789'));
-			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)."</pre>\n";
+			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 1) {
+				$event->set('generatedToken', randomChars($iTokenLength, '123456789'));
+			}
+			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 2) {
+				$token = str_replace(
+					array('~','_','0','o','O','1','l','I'),
+					array('a','z','7','p','P','8','k','K'), Yii::app()->securityManager->generateRandomString($iTokenLength));
+				$event->set('generatedToken', $token);
+			}
+			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('TFRcustomToken', 'Survey', $iSurveyID)."</pre>\n";
 		}
 
 		/**
@@ -54,8 +62,11 @@ class TFRcustomToken extends PluginBase {
 				'settings' => array(
 					'TFRcustomToken' => array(
 						'type' => 'select',
-						'options'=>array(0=>'No',
-							1=>'Yes'),
+						'options'=>array(
+							0=>'Not active for this survey',
+							1=>'Numeric tokens',
+							2=>'Omit ambiguous characters'
+							),
 						'default' => 0,
 						'label' => 'Use plugin for this survey',
 						'current' => $this->get('TFRcustomToken', 'Survey', $event->get('survey'))
