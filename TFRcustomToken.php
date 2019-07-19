@@ -43,8 +43,8 @@ class TFRcustomToken extends PluginBase {
             // 2 = Without ambiguous characters including 'hard to manually enter'
             // https://github.com/LimeSurvey/LimeSurvey/commit/154e026fbe6e53037e46a8c30f2b837459235acc
             $token = str_replace(
-                array('~','_','0','o','O','1','l','I'),
-                array('a','z','7','p','P','8','k','K'), Yii::app()->securityManager->generateRandomString($iTokenLength));
+                array('~','_','0','O','1','l','I'),
+                array('a','z','7','P','8','k','K'), Yii::app()->securityManager->generateRandomString($iTokenLength));
         }
         else if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 3) {
             // 3 = CAPITALS ONLY
