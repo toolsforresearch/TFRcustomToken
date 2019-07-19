@@ -29,21 +29,46 @@ class TFRcustomToken extends PluginBase {
 		{
 			$event = $this->getEvent();
 			$iSurveyID=$event->get('surveyId');
+			$iTokenLength = $event->get('iTokenLength');
+			$token = "";
 			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 0) {
-				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, 0)."</pre>";
+				// 0 = No custom function for this survey: return without changes in $event
 				return;
 			}
-			$iTokenLength = $event->get('iTokenLength');
-			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 1) {
-				$event->set('generatedToken', randomChars($iTokenLength, '123456789'));
+			else if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 1) {
+				// 1 = Numeric tokens
+				$token = randomChars($iTokenLength, '123456789');
 			}
-			if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 2) {
+			else if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 2) {
+				// 2 = Without ambiguous characters including 'hard to manually enter'
+				// https://github.com/LimeSurvey/LimeSurvey/commit/154e026fbe6e53037e46a8c30f2b837459235acc
 				$token = str_replace(
 					array('~','_','0','o','O','1','l','I'),
 					array('a','z','7','p','P','8','k','K'), Yii::app()->securityManager->generateRandomString($iTokenLength));
-				$event->set('generatedToken', $token);
 			}
-			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('TFRcustomToken', 'Survey', $iSurveyID)."</pre>\n";
+			else if ($this->get('TFRcustomToken', 'Survey', $iSurveyID) == 3) {
+				// 3 = CAPITALS ONLY
+				if (function_exists('crypto_rand_secure')) {
+					/**
+					 * Adjusted from Yii::app()->securityManager->generateRandomString($length=32)
+					 * https://github.com/LimeSurvey/LimeSurvey/blob/master/application/core/web/LSYii_SecurityManager.php#L71
+					 * Use crypto_rand_secure($min, $max) defined in application/helpers/common_helper.php
+					 */
+					$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+					for($i=0;$i<$iTokenLength;$i++){
+						$token .= $codeAlphabet[crypto_rand_secure(0,strlen($codeAlphabet))];
+					}
+				} else {
+					/**
+					 * Secure enough, although not cryptographically secure
+					 * https://www.php.net/manual/en/function.rand.php
+					 */
+					for($i=0;$i<$iTokenLength;$i++){
+						$token .= chr(64+rand(1, 26));
+					}
+				}
+			}
+			$event->set('generatedToken', $token);
 		}
 
 		/**
@@ -63,12 +88,13 @@ class TFRcustomToken extends PluginBase {
 					'TFRcustomToken' => array(
 						'type' => 'select',
 						'options'=>array(
-							0=>'Not active for this survey',
+							0=>'No custom function for this survey',
 							1=>'Numeric tokens',
-							2=>'Omit ambiguous characters'
+							2=>'Without ambiguous characters',
+							3=>'CAPITALS ONLY'
 							),
 						'default' => 0,
-						'label' => 'Use plugin for this survey',
+						'label' => 'Custom token:',
 						'current' => $this->get('TFRcustomToken', 'Survey', $event->get('survey'))
 					)
 				)
