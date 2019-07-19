@@ -33,7 +33,7 @@ It needs a change in the core of Limesurvey:
          /**
 
 # Installation
-Installation of the plugin is like any other LimeSurvey plugin. Upload (or git clone) the plugin to a directory TFRcustomToken in the plugin directory (directly under LimeSurvey's root directory). You will need FTP access to upload the plugin. The plugin should be recognized automatically. If you activate the plugin it does not do anything yet.
+Installation of the plugin is like any other LimeSurvey plugin. Upload (or git clone) the plugin to a directory TFRcustomToken in the plugins directory (directly under LimeSurvey's root directory). You will need FTP access to upload the plugin. The plugin should be recognized automatically. If you activate the plugin it does not do anything yet.
 
 # Global configuration
 None (yet). Only activate ar deacticate.
@@ -42,6 +42,9 @@ None (yet). Only activate ar deacticate.
 Enable or disable the plugin per survey. Example URL:
 /index.php/admin/survey/sa/rendersidemenulink/subaction/plugins/surveyid/46159  
 See https://bugs.limesurvey.org/view.php?id=13446 if the Plugins menu is not visible below Resources.
+
+# Uninstallation
+The plugin can be uninstalled by deactivating it. At that moment it will remove it's settings from LimeSurvey's plugin_settings table. After deactivating you can simply delete the TFRcustomToken directory from the plugins directory.
 
 # Authors & License
 This plugin was written by https://www.toolsforresearch.com, the company of Tammo ter Hark and Jan Ehrhardt. It was published on July 19, 2019, at https://github.com/toolsforresearch/TFRcustomToken under the MIT License. The MIT License is a short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.

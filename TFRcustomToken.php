@@ -11,12 +11,15 @@ class TFRcustomToken extends PluginBase {
 			 * Here you should handle subscribing to the events your plugin will handle
 			 */
 			$this->subscribe('customToken', 'generateCustomToken');
-			
+
 			// Provides survey specific settings.
 			$this->subscribe('beforeSurveySettings');
 
 			// Saves survey specific settings.
 			$this->subscribe('newSurveySettings');
+
+			// Clean up on deactivate
+			$this->subscribe('beforeDeactivate');
 		}
 
 		/**
@@ -72,4 +75,15 @@ class TFRcustomToken extends PluginBase {
 					$this->set($name, $value, 'Survey', $event->get('survey'));
 			}
 		}
+		
+		/**
+		 * Clean up the plugin settings table
+		 */
+		public function beforeDeactivate()
+		{
+			$sDBPrefix = Yii::app()->db->tablePrefix;
+			$sql = "DELETE FROM {$sDBPrefix}plugin_settings WHERE `key` LIKE :key";
+			Yii::app()->db->createCommand($sql)->execute(array(':key' => "TFRcustomToken"));
+		}
+
 }
