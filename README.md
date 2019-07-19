@@ -40,7 +40,8 @@ None (yet). Only activate ar deacticate.
 
 # Configuration on the survey level
 Enable or disable the plugin per survey. Example URL:
-/index.php/admin/survey/sa/rendersidemenulink/subaction/plugins/surveyid/46159
+/index.php/admin/survey/sa/rendersidemenulink/subaction/plugins/surveyid/46159  
+See https://bugs.limesurvey.org/view.php?id=13446 if the Plugins menu is not visible below Resources.
 
 # Authors & License
 This plugin was written by https://www.toolsforresearch.com, the company of Tammo ter Hark and Jan Ehrhardt. It was published on July 19, 2019, at https://github.com/toolsforresearch/TFRcustomToken under the MIT License. The MIT License is a short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.

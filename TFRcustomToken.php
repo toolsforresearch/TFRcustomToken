@@ -26,13 +26,13 @@ class TFRcustomToken extends PluginBase {
 		{
 			$event = $this->getEvent();
 			$iSurveyID=$event->get('surveyId');
-			if (!$this->get('enabled', 'Survey', $iSurveyID, false)) {
-				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>";
+			if (!$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)) {
+				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)."</pre>";
 				return;
 			}
 			$iTokenLength = $event->get('iTokenLength');
 			$event->set('generatedToken', randomChars($iTokenLength, '123456789'));
-			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>\n";
+			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('TFRcustomToken', 'Survey', $iSurveyID, false)."</pre>\n";
 		}
 
 		/**
@@ -49,13 +49,13 @@ class TFRcustomToken extends PluginBase {
 			$event->set("surveysettings.{$iSurveyID}", array(
 				'name' => get_class($this),
 				'settings' => array(
-					'enabled' => array(
+					'TFRcustomToken' => array(
 						'type' => 'select',
 						'options'=>array(0=>'No',
 							1=>'Yes'),
 						'default' => 0,
 						'label' => 'Use plugin for this survey',
-						'current' => $this->get('enabled', 'Survey', $event->get('survey'))
+						'current' => $this->get('TFRcustomToken', 'Survey', $event->get('survey'))
 					)
 				)
 			));
