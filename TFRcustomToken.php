@@ -20,22 +20,19 @@ class TFRcustomToken extends PluginBase {
 		}
 
 		/**
-		 * This event is fired by the administration panel to gather extra settings
-		 * available for a survey.
-		 * The plugin should return setting meta data.
-		 * @param PluginEvent $event
+		 * The custom generate function
 		 */
 		public function generateCustomToken()
 		{
 			$event = $this->getEvent();
 			$iSurveyID=$event->get('surveyId');
 			if (!$this->get('enabled', 'Survey', $iSurveyID, false)) {
-				echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>";
+				//echo "<pre>pkugin not active for iSurveyID {$iSurveyID} ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>";
 				return;
 			}
 			$iTokenLength = $event->get('iTokenLength');
 			$event->set('generatedToken', randomChars($iTokenLength, '123456789'));
-			echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>\n";
+			//echo "<pre>iSurveyID = {$iSurveyID} generatedToken ".$event->get('generatedToken')." ".$this->get('enabled', 'Survey', $iSurveyID, false)."</pre>\n";
 		}
 
 		/**
