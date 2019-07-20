@@ -10,7 +10,7 @@ class TFRcustomToken extends PluginBase {
         /**
          * Here you should handle subscribing to the events your plugin will handle
          */
-        $this->subscribe('customToken', 'generateCustomToken');
+        $this->subscribe('afterGenerateToken', 'generateCustomToken');
 
         // Provides survey specific settings.
         $this->subscribe('beforeSurveySettings');
@@ -68,7 +68,7 @@ class TFRcustomToken extends PluginBase {
                 }
             }
         }
-        $event->set('generatedToken', $token);
+        $event->set('token', $token);
     }
 
     /**
