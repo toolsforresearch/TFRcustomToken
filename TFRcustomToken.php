@@ -81,7 +81,7 @@ class TFRcustomToken extends PluginBase {
         $pluginsettings = $this->getPluginSettings(true);
 
         $event = $this->getEvent();
-        $iSurveyID = isset($_SESSION['LEMsid']) ? intval($_SESSION['LEMsid']) : NULL;;
+        $iSurveyID=$event->get('iSurveyID');
         $event->set("surveysettings.{$iSurveyID}", array(
             'name' => get_class($this),
             'settings' => array(
