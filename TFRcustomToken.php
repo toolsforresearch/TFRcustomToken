@@ -3,7 +3,7 @@ class TFRcustomToken extends PluginBase {
 
     protected $storage = 'DbStorage';
     static protected $name = 'TFRcustomToken';
-    static protected $description = 'TFRcustomToken plugin';
+    static protected $description = 'Numeric, non-ambiguous or CAPITAL tokens';
 
     public function init()
     {
